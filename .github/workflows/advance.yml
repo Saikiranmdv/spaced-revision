@@ -4,6 +4,12 @@ on:
   push:
     paths:
       - "notes/**"
+      - "1-day/**"
+      - "3-days/**"
+      - "7-days/**"
+      - "1-week/**"
+      - "1-month/**"
+      - "3-months/**"
       - ".github/scripts/advance.py"
 
 jobs:
