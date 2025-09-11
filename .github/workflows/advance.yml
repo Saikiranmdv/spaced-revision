@@ -1,0 +1,36 @@
+name: Spaced Revision (Advance)
+
+on:
+  push:
+    paths:
+      - "notes/**"
+      - ".github/scripts/advance.py"
+
+jobs:
+  advance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Advance marked notes
+        run: python .github/scripts/advance.py
+
+      - name: Commit moves (if any)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(srs): advance revised notes to next stage"
+          commit_user_name: "srs-bot"
+          commit_user_email: "srs-bot@users.noreply.github.com"
+          push_options: "--force-with-lease"

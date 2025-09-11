@@ -1,4 +1,4 @@
-name: Spaced Revision (Advance + Notify)
+name: Spaced Revision (Notify)
 
 on:
   schedule:
@@ -7,9 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  advance-and-notify:
+  notify:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -24,18 +23,7 @@ jobs:
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install requests
-
-      - name: Advance marked notes
-        run: python .github/scripts/advance.py
-
-      - name: Commit moves (if any)
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(srs): advance revised notes to next stage"
-          commit_user_name: "srs-bot"
-          commit_user_email: "srs-bot@users.noreply.github.com"
-          push_options: "--force-with-lease"
+          pip install requests python-dotenv
 
       - name: Send Telegram notification
         env:
