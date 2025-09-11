@@ -12,6 +12,9 @@ on:
       - "3-months/**"
       - ".github/scripts/advance.py"
 
+permissions:
+  contents: write 
+
 jobs:
   advance:
     runs-on: ubuntu-latest
