@@ -1,4 +1,3 @@
-import os
 import re
 import shutil
 from pathlib import Path
@@ -17,11 +16,9 @@ def ensure_dirs():
 
 def is_marked_done_by_name(p: Path) -> bool:
     # e.g. notes like "topic.done.md" or "topic.done"
-    stem = p.stem  # filename without suffix
-    return stem.endswith(".done")
+    return p.stem.endswith(".done")
 
 def strip_done_from_name(p: Path) -> Path:
-    # Turn "file.done.md" -> "file.md" ; "file.done" -> "file"
     if p.stem.endswith(".done"):
         new_stem = p.stem[:-5]  # remove ".done"
         return p.with_name(new_stem + p.suffix)
@@ -29,8 +26,7 @@ def strip_done_from_name(p: Path) -> Path:
 
 def is_marked_done_in_content(p: Path) -> bool:
     try:
-        # Only check text-like files; skip binaries > 2 MB for safety
-        if p.stat().st_size > 2 * 1024 * 1024:
+        if p.stat().st_size > 2 * 1024 * 1024:  # skip large binaries
             return False
         text = p.read_text(encoding="utf-8", errors="ignore")
         return RE_DONE.search(text) is not None
@@ -42,9 +38,8 @@ def remove_done_marker(p: Path):
         text = p.read_text(encoding="utf-8", errors="ignore")
         new_text = RE_DONE.sub(" ", text)
         if new_text != text:
-            p.write_text(new_text, encoding="utf-8")
+            p.write_text(new_text.strip() + "\n", encoding="utf-8")
     except Exception:
-        # If anything goes wrong, leave file as-is (name-based marker may still handle it)
         pass
 
 def next_stage_dir(current_dir: Path) -> Path | None:
@@ -58,7 +53,7 @@ def next_stage_dir(current_dir: Path) -> Path | None:
 
 def advance_once():
     moved = []
-    for i, stage_dir in enumerate(STAGE_DIRS[:-1]):  # skip last stage
+    for stage_dir in STAGE_DIRS[:-1]:  # skip last stage
         for p in stage_dir.iterdir():
             if p.is_dir():
                 continue
@@ -68,7 +63,6 @@ def advance_once():
                 if not (mark_by_name or mark_by_content):
                     continue
 
-                # Prepare destination path and clean up markers
                 dest_dir = next_stage_dir(stage_dir)
                 if dest_dir is None:
                     continue
@@ -77,7 +71,6 @@ def advance_once():
                 if mark_by_content:
                     remove_done_marker(p)
 
-                # If we changed the name, rename before move to keep history sane
                 src_path = p
                 if new_name_path.name != p.name:
                     src_path = p.with_name(new_name_path.name)
