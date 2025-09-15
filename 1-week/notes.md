@@ -1,1 +1,0 @@
-These Topics must be Revised after a week
