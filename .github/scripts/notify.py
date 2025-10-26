@@ -7,9 +7,25 @@ TRACKER_FILE = "revision_tracker.json"
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
+REPO_URL = "https://github.com/Saikiranmdv/spaced-revision/blob/main/notes"
+
+def make_link(fname, stage, next_due=None, pending=False):
+    url = f"{REPO_URL}/{fname}"
+    if pending and next_due:
+        return f"[{fname}]({url}) (was due {next_due}, stage {stage})"
+    return f"[{fname}]({url}) ({stage})"
+
 def send(msg: str):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    r = requests.post(url, data={"chat_id": CHAT_ID, "text": msg}, timeout=20)
+    r = requests.post(
+        url,
+        data={
+            "chat_id": CHAT_ID,
+            "text": msg,
+            "parse_mode": "Markdown"   
+        },
+        timeout=20
+    )
     r.raise_for_status()
 
 if __name__ == "__main__":
@@ -25,11 +41,11 @@ if __name__ == "__main__":
     for fname, info in tracker.items():
         next_due = datetime.fromisoformat(info["next_due"]).date()
         if next_due == today:
-            due_today.append(f"{fname} ({info['stage']})")
+            due_today.append(make_link(fname, info["stage"]))
         elif next_due < today:
             if not info.get("pending", False):
                 info["pending"] = True
-            pending.append(f"{fname} (was due {next_due}, stage {info['stage']})")
+            pending.append(make_link(fname, info["stage"], next_due, pending=True))
 
     # save updated tracker (with pending flags)
     json.dump(tracker, open(TRACKER_FILE, "w"), indent=2)
