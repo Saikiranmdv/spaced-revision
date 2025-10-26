@@ -22,9 +22,16 @@
   },
   "log-analyzer-project.md": {
     "study_date": "2025-10-26",
+    "stage": "1-day",
+    "next_due": "2025-10-27",
+    "pending": false,
+    "revisions_done": 1
+  },
+  "README.md": {
+    "study_date": "2025-10-26",
     "stage": "notes",
-    "next_due": "2025-10-24",
-    "pending": true,
+    "next_due": "2025-10-27",
+    "pending": false,
     "revisions_done": 0
   }
 }
