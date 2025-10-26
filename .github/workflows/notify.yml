@@ -23,10 +23,19 @@ jobs:
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install requests python-dotenv
+          pip install requests
+
 
       - name: Send Telegram notification
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python .github/scripts/notify.py
+
+      - name: Commit tracker updates
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(srs): update tracker pending flags"
+          commit_user_name: "srs-bot"
+          commit_user_email: "srs-bot@users.noreply.github.com"
+

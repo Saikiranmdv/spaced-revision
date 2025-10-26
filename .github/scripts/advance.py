@@ -1,96 +1,77 @@
-import re
-import shutil
+import os, json, re
 from pathlib import Path
+from datetime import datetime, timedelta
 
-# Stage order (left -> right). Anything in 'notes/' goes to '1-day' first.
-STAGES = ["notes", "1-day", "3-days", "7-days", "1-week", "1-month", "3-months"]
+TRACKER_FILE = Path("revision_tracker.json")
+NOTES_DIR = Path("notes")
+
+STAGE_ORDER = ["notes", "1-day", "3-days", "7-days", "1-week", "1-month", "3-months"]
+STAGE_DAYS = {
+    "1-day": 1,
+    "3-days": 3,
+    "7-days": 7,
+    "1-week": 14,
+    "1-month": 30,
+    "3-months": 90
+}
 
 RE_DONE = re.compile(r'(^|\s)@done(\s|$)', re.IGNORECASE)
 
-REPO_ROOT = Path(__file__).resolve().parents[2]  # repo root from .github/scripts
-STAGE_DIRS = [REPO_ROOT / s for s in STAGES]
+def load_tracker():
+    if TRACKER_FILE.exists():
+        return json.loads(TRACKER_FILE.read_text())
+    return {}
 
-def ensure_dirs():
-    for d in STAGE_DIRS:
-        d.mkdir(parents=True, exist_ok=True)
+def save_tracker(data):
+    TRACKER_FILE.write_text(json.dumps(data, indent=2))
 
-def is_marked_done_by_name(p: Path) -> bool:
-    # e.g. notes like "topic.done.md" or "topic.done"
-    return p.stem.endswith(".done")
-
-def strip_done_from_name(p: Path) -> Path:
-    if p.stem.endswith(".done"):
-        new_stem = p.stem[:-5]  # remove ".done"
-        return p.with_name(new_stem + p.suffix)
-    return p
-
-def is_marked_done_in_content(p: Path) -> bool:
-    try:
-        if p.stat().st_size > 2 * 1024 * 1024:  # skip large binaries
-            return False
-        text = p.read_text(encoding="utf-8", errors="ignore")
-        return RE_DONE.search(text) is not None
-    except Exception:
-        return False
-
-def remove_done_marker(p: Path):
-    try:
-        text = p.read_text(encoding="utf-8", errors="ignore")
+def strip_done_marker(file: Path) -> bool:
+    text = file.read_text(encoding="utf-8", errors="ignore")
+    if "@done" in text:
         new_text = RE_DONE.sub(" ", text)
-        if new_text != text:
-            p.write_text(new_text.strip() + "\n", encoding="utf-8")
-    except Exception:
-        pass
+        file.write_text(new_text.strip() + "\n", encoding="utf-8")
+        return True
+    return False
 
-def next_stage_dir(current_dir: Path) -> Path | None:
-    try:
-        idx = STAGE_DIRS.index(current_dir)
-    except ValueError:
-        return None
-    if idx >= len(STAGE_DIRS) - 1:
-        return None
-    return STAGE_DIRS[idx + 1]
-
-def advance_once():
-    moved = []
-    for stage_dir in STAGE_DIRS[:-1]:  # skip last stage
-        for p in stage_dir.iterdir():
-            if p.is_dir():
-                continue
-            try:
-                mark_by_name = is_marked_done_by_name(p)
-                mark_by_content = is_marked_done_in_content(p)
-                if not (mark_by_name or mark_by_content):
-                    continue
-
-                dest_dir = next_stage_dir(stage_dir)
-                if dest_dir is None:
-                    continue
-
-                new_name_path = strip_done_from_name(p)
-                if mark_by_content:
-                    remove_done_marker(p)
-
-                src_path = p
-                if new_name_path.name != p.name:
-                    src_path = p.with_name(new_name_path.name)
-                    p.rename(src_path)
-
-                dest_path = dest_dir / src_path.name
-                dest_dir.mkdir(parents=True, exist_ok=True)
-                shutil.move(str(src_path), str(dest_path))
-
-                moved.append((stage_dir.name, dest_dir.name, dest_path.name))
-            except Exception as e:
-                print(f"[warn] Could not process {p}: {e}")
-    return moved
+def next_stage(stage):
+    if stage not in STAGE_ORDER:
+        return "1-day"
+    idx = STAGE_ORDER.index(stage)
+    return STAGE_ORDER[idx+1] if idx+1 < len(STAGE_ORDER) else None
 
 if __name__ == "__main__":
-    ensure_dirs()
-    moves = advance_once()
-    if moves:
-        print("Advanced files:")
-        for a, b, name in moves:
-            print(f" - {name}: {a} -> {b}")
-    else:
-        print("No files marked @done. Nothing to advance.")
+    tracker = load_tracker()
+    today = datetime.today().date()
+
+    # Step 1: Ensure all notes are in tracker
+    for f in NOTES_DIR.glob("*"):
+        if f.is_file() and f.name not in tracker:
+            tracker[f.name] = {
+                "study_date": str(today),
+                "stage": "notes",
+                "next_due": str(today + timedelta(days=1)),  # default first due = tomorrow
+                "pending": False,
+                "revisions_done": 0
+            }
+            print(f"Added new note to tracker: {f.name}")
+
+    # Step 2: Check for @done in notes
+    for f in NOTES_DIR.glob("*"):
+        if f.is_file():
+            if strip_done_marker(f):
+                info = tracker.get(f.name, {
+                    "study_date": str(today),
+                    "revisions_done": 0
+                })
+                curr_stage = info.get("stage", "notes")
+                nxt = next_stage(curr_stage)
+                if nxt:
+                    info["stage"] = nxt
+                    info["next_due"] = str(today + timedelta(days=STAGE_DAYS[nxt]))
+                    info["pending"] = False
+                    info["revisions_done"] += 1
+                    tracker[f.name] = info
+                    print(f"Advanced {f.name} → {nxt}, next due {info['next_due']}")
+
+    save_tracker(tracker)
+    print("Tracker updated.")

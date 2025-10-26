@@ -1,43 +1,46 @@
-import os
-from pathlib import Path
+import os, json
+from datetime import datetime
 import requests
-# from dotenv import load_dotenv
 
-# # Load .env only if it exists (local dev)
-# load_dotenv()
+TRACKER_FILE = "revision_tracker.json"
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-if not BOT_TOKEN or not CHAT_ID:
-    raise SystemExit("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID env vars")
-
-STAGES = ["notes", "1-day", "3-days", "7-days", "1-week", "1-month", "3-months"]
-REPO_ROOT = Path(__file__).resolve().parents[2]
-
-def list_stage(folder: str):
-    p = (REPO_ROOT / folder)
-    if not p.exists():
-        return []
-    return sorted([f.name for f in p.iterdir() if f.is_file()])
-
 def send(msg: str):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = {"chat_id": CHAT_ID, "text": msg}
-    r = requests.post(url, data=payload, timeout=20)
+    r = requests.post(url, data={"chat_id": CHAT_ID, "text": msg}, timeout=20)
     r.raise_for_status()
 
 if __name__ == "__main__":
-    lines = ["📚 Today's Study Revision"]
-    has_any = False
-    for stage in STAGES:
-        files = list_stage(stage)
-        if files:
-            has_any = True
-            lines.append(f"\n📂 {stage}:")
-            lines.extend(f"- {name}" for name in files)
+    if not os.path.exists(TRACKER_FILE):
+        send("📚 No revision data found yet.")
+        exit()
 
-    if not has_any:
-        lines = ["✅ No scheduled study items today!"]
+    tracker = json.load(open(TRACKER_FILE))
+    today = datetime.today().date()
 
-    send("\n".join(lines))
+    due_today, pending = [], []
+
+    for fname, info in tracker.items():
+        next_due = datetime.fromisoformat(info["next_due"]).date()
+        if next_due == today:
+            due_today.append(f"{fname} ({info['stage']})")
+        elif next_due < today:
+            if not info.get("pending", False):
+                info["pending"] = True
+            pending.append(f"{fname} (was due {next_due}, stage {info['stage']})")
+
+    # save updated tracker (with pending flags)
+    json.dump(tracker, open(TRACKER_FILE, "w"), indent=2)
+
+    msg = f"📚 Revision Status for {today}\n\n"
+    if due_today:
+        msg += "✅ Due Today:\n" + "\n".join(f"- {f}" for f in due_today) + "\n\n"
+    if pending:
+        msg += "⚠️ Pending:\n" + "\n".join(f"- {f}" for f in pending) + "\n\n"
+    if not (due_today or pending):
+        msg += "🎉 Nothing due today!"
+
+    send(msg)
+    print("Notification sent.")
