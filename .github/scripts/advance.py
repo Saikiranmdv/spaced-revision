@@ -24,9 +24,10 @@ def load_tracker():
         with open(TRACKER_FILE, "r") as f:
             content = f.read().strip()
             if not content:
-                return {}
+                return {}  # handle empty file safely
             return json.loads(content)
-    except Exception:
+    except json.JSONDecodeError as e:
+        print(f"[ERROR] Could not parse revision_tracker.json: {e}")
         return {}
 
 def save_tracker(data):
