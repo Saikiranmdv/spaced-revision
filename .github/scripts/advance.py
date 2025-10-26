@@ -18,9 +18,16 @@ STAGE_DAYS = {
 RE_DONE = re.compile(r'(^|\s)@done(\s|$)', re.IGNORECASE)
 
 def load_tracker():
-    if TRACKER_FILE.exists():
-        return json.loads(TRACKER_FILE.read_text())
-    return {}
+    if not os.path.exists(TRACKER_FILE):
+        return {}
+    try:
+        with open(TRACKER_FILE, "r") as f:
+            content = f.read().strip()
+            if not content:
+                return {}
+            return json.loads(content)
+    except Exception:
+        return {}
 
 def save_tracker(data):
     TRACKER_FILE.write_text(json.dumps(data, indent=2))
