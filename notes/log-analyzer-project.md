@@ -202,3 +202,5 @@ fi
 * Core: `c`, `x`, `t`, `f`, `v`
 * Compression: `z`, `j`, `J`, `--zstd`
 * Helpers: `-C`, `--exclude`, `--strip-components`
+
+@done
