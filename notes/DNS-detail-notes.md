@@ -61,5 +61,3 @@ Steps when you make a DNS query (e.g., `tryhackme.com`):
 - Domain hierarchy = Root → TLD → SLD → Subdomain.  
 - Common records: **A (IPv4)**, **AAAA (IPv6)**, **CNAME (alias)**, **MX (mail)**, **TXT (text/authentication)**.  
 - DNS resolution flow: Cache → Recursive → Root → TLD → Authoritative.
-
-  @done

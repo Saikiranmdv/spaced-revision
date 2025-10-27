@@ -8,10 +8,10 @@
   },
   "DNS-detail-notes.md": {
     "study_date": "2025-10-26",
-    "stage": "notes",
-    "next_due": "2025-10-26",
-    "pending": true,
-    "revisions_done": 0
+    "stage": "1-day",
+    "next_due": "2025-10-28",
+    "pending": false,
+    "revisions_done": 1
   },
   "networking-concepts.md": {
     "study_date": "2025-10-26",
