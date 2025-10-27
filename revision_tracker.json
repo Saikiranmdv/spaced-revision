@@ -1,10 +1,10 @@
 {
   "test-note.md": {
     "study_date": "2025-10-26",
-    "stage": "3-days",
-    "next_due": "2025-10-30",
+    "stage": "7-days",
+    "next_due": "2025-11-03",
     "pending": false,
-    "revisions_done": 2
+    "revisions_done": 3
   },
   "DNS-detail-notes.md": {
     "study_date": "2025-10-26",
