@@ -3,14 +3,14 @@
     "study_date": "2025-10-26",
     "stage": "1-day",
     "next_due": "2025-10-26",
-    "pending": false,
+    "pending": true,
     "revisions_done": 1
   },
   "DNS-detail-notes.md": {
     "study_date": "2025-10-26",
     "stage": "notes",
     "next_due": "2025-10-26",
-    "pending": false,
+    "pending": true,
     "revisions_done": 0
   },
   "networking-concepts.md": {
