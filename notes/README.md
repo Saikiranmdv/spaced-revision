@@ -1,1 +1,0 @@
-Put all your Notes here whatever you studied for the day and then move to the next stage by just marking it as done
