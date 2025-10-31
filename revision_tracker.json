@@ -38,7 +38,7 @@
     "study_date": "2025-10-29",
     "stage": "notes",
     "next_due": "2025-10-30",
-    "pending": false,
+    "pending": true,
     "revisions_done": 0
   }
 }
