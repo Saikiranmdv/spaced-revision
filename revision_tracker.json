@@ -40,5 +40,12 @@
     "next_due": "2025-10-30",
     "pending": true,
     "revisions_done": 0
+  },
+  "linux_fundamentals_3_notes.md": {
+    "study_date": "2025-11-01",
+    "stage": "notes",
+    "next_due": "2025-11-02",
+    "pending": false,
+    "revisions_done": 0
   }
 }
