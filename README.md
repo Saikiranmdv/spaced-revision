@@ -6,7 +6,7 @@ This repo contains my study notes and an automated spaced-repetition pipeline.
 
 ## 📊 Dashboard (auto-updated daily)
 
-_Last updated: 2025-11-02_
+_Last updated: 2025-11-03_
 
 
 ### Stage Distribution
@@ -15,7 +15,7 @@ _Last updated: 2025-11-02_
 - notes: 4
 
 ### ✅ Due Today
-- [linux_fundamentals_3_notes.md](notes/linux_fundamentals_3_notes.md) (stage: notes)
+- [test-note.md](notes/test-note.md) (stage: 7-days)
 
 ### ⚠️ Pending
 - [DNS-detail-notes.md](notes/DNS-detail-notes.md) (was due 2025-10-28, stage 1-day)
@@ -23,3 +23,4 @@ _Last updated: 2025-11-02_
 - [log-analyzer-project.md](notes/log-analyzer-project.md) (was due 2025-10-27, stage 1-day)
 - [README.md](notes/README.md) (was due 2025-10-27, stage notes)
 - [serverless-notes.md](notes/serverless-notes.md) (was due 2025-10-30, stage notes)
+- [linux_fundamentals_3_notes.md](notes/linux_fundamentals_3_notes.md) (was due 2025-11-02, stage notes)
