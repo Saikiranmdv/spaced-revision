@@ -6,7 +6,7 @@ This repo contains my study notes and an automated spaced-repetition pipeline.
 
 ## 📊 Dashboard (auto-updated daily)
 
-_Last updated: 2025-11-03_
+_Last updated: 2025-11-04_
 
 
 ### Stage Distribution
@@ -15,9 +15,10 @@ _Last updated: 2025-11-03_
 - notes: 4
 
 ### ✅ Due Today
-- [test-note.md](notes/test-note.md) (stage: 7-days)
+- None 🎉
 
 ### ⚠️ Pending
+- [test-note.md](notes/test-note.md) (was due 2025-11-03, stage 7-days)
 - [DNS-detail-notes.md](notes/DNS-detail-notes.md) (was due 2025-10-28, stage 1-day)
 - [networking-concepts.md](notes/networking-concepts.md) (was due 2025-10-27, stage notes)
 - [log-analyzer-project.md](notes/log-analyzer-project.md) (was due 2025-10-27, stage 1-day)
