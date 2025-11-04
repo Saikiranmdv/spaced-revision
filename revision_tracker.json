@@ -3,7 +3,7 @@
     "study_date": "2025-10-26",
     "stage": "7-days",
     "next_due": "2025-11-03",
-    "pending": false,
+    "pending": true,
     "revisions_done": 3
   },
   "DNS-detail-notes.md": {
