@@ -33,5 +33,12 @@
     "next_due": "2025-11-02",
     "pending": true,
     "revisions_done": 0
+  },
+  "kubernetes_notes-1.md": {
+    "study_date": "2025-11-05",
+    "stage": "notes",
+    "next_due": "2025-11-06",
+    "pending": false,
+    "revisions_done": 0
   }
 }
