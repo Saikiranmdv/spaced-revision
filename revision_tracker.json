@@ -1,11 +1,4 @@
 {
-  "test-note.md": {
-    "study_date": "2025-10-26",
-    "stage": "7-days",
-    "next_due": "2025-11-03",
-    "pending": true,
-    "revisions_done": 3
-  },
   "DNS-detail-notes.md": {
     "study_date": "2025-10-26",
     "stage": "1-day",
@@ -26,13 +19,6 @@
     "next_due": "2025-10-27",
     "pending": true,
     "revisions_done": 1
-  },
-  "README.md": {
-    "study_date": "2025-10-26",
-    "stage": "notes",
-    "next_due": "2025-10-27",
-    "pending": true,
-    "revisions_done": 0
   },
   "serverless-notes.md": {
     "study_date": "2025-10-29",
