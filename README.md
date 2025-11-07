@@ -6,7 +6,7 @@ This repo contains my study notes and an automated spaced-repetition pipeline.
 
 ## 📊 Dashboard (auto-updated daily)
 
-_Last updated: 2025-11-06_
+_Last updated: 2025-11-07_
 
 
 ### Stage Distribution
@@ -14,7 +14,7 @@ _Last updated: 2025-11-06_
 - notes: 4
 
 ### ✅ Due Today
-- [kubernetes_notes-1.md](notes/kubernetes_notes-1.md) (stage: notes)
+- None 🎉
 
 ### ⚠️ Pending
 - [DNS-detail-notes.md](notes/DNS-detail-notes.md) (was due 2025-10-28, stage 1-day)
@@ -22,3 +22,4 @@ _Last updated: 2025-11-06_
 - [log-analyzer-project.md](notes/log-analyzer-project.md) (was due 2025-10-27, stage 1-day)
 - [serverless-notes.md](notes/serverless-notes.md) (was due 2025-10-30, stage notes)
 - [linux_fundamentals_3_notes.md](notes/linux_fundamentals_3_notes.md) (was due 2025-11-02, stage notes)
+- [kubernetes_notes-1.md](notes/kubernetes_notes-1.md) (was due 2025-11-06, stage notes)
