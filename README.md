@@ -6,15 +6,15 @@ This repo contains my study notes and an automated spaced-repetition pipeline.
 
 ## 📊 Dashboard (auto-updated daily)
 
-_Last updated: 2025-11-18_
+_Last updated: 2025-11-19_
 
 
 ### Stage Distribution
 - 1-day: 2
-- notes: 4
+- notes: 5
 
 ### ✅ Due Today
-- None 🎉
+- [kubernetes_part2_notes.md](notes/kubernetes_part2_notes.md) (stage: notes)
 
 ### ⚠️ Pending
 - [DNS-detail-notes.md](notes/DNS-detail-notes.md) (was due 2025-10-28, stage 1-day)
