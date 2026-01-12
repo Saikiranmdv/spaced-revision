@@ -6,7 +6,7 @@ This repo contains my study notes and an automated spaced-repetition pipeline.
 
 ## 📊 Dashboard (auto-updated daily)
 
-_Last updated: 2026-01-11_
+_Last updated: 2026-01-12_
 
 
 ### Stage Distribution
